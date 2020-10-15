@@ -1,6 +1,7 @@
 package orders
 
 import (
+	"net/http"
 	"sync"
 	"time"
 )
@@ -15,6 +16,12 @@ func ListenToDir(ot *OrderTable, wg *sync.WaitGroup, f func(ot *OrderTable, fpat
 		time.Sleep(time.Duration(waitTimeSecs) * time.Second)
 		// scan the dir for files
 		fpaths = ScanDir(dir)
-
+		// add orders to order table
+		for _, fpath := range fpaths {
+			f(ot, fpath, delete)
+		}
 	}
 }
+
+// ListenToHTTP : listen to order through an HTTP server
+func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Request)) {}
