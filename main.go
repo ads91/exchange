@@ -28,4 +28,6 @@ func main() {
 	// add a wait for the order matcher
 	wg.Add(1)
 	go matching.SettleOrders(&ot, &wg, matching.WriteToJSON, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/settlements", 5)
+	// wait
+	wg.Wait()
 }
