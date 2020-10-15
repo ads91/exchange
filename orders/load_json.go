@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 )
 
 // AddJSONOrderFromDir : add a JSON order residing in a local directory to an order table instance
 func AddJSONOrderFromDir(ot *OrderTable, fpath string, delete bool) {
-	var ojson orderJSON
+	var oj orderJSON
 	// open the file
 	jsonFile, err := os.Open(fpath)
 	if err != nil {
@@ -18,14 +19,33 @@ func AddJSONOrderFromDir(ot *OrderTable, fpath string, delete bool) {
 	// parse the file
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	// read the order from the JSON
-	err = json.Unmarshal(byteValue, &ojson)
+	err = json.Unmarshal(byteValue, &oj)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// add order to table
-	addOrderToTable(newOrderFromJSON(&ojson), ot)
+	addOrderToTable(newOrderFromJSON(&oj), ot)
 	// close and delete order file, if required
 	closeFile(jsonFile, fpath, delete)
+}
+
+// AddJSONOrderFromHTTP : add a JSON order through a request to an HTTP server
+func (ot *OrderTable) AddJSONOrderFromHTTP(w http.ResponseWriter, r *http.Request) {
+	var oj orderJSON
+	// parse form from request
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	// deserialise the JSON into a struct
+	decoder := json.NewDecoder(r.Body)
+	err = decoder.Decode(&oj)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// add order to table
+	addOrderToTable(newOrderFromJSON(&oj), ot)
 }
 
 // newOrderFromJSON : create an order instance from a JSON
