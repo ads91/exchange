@@ -1,0 +1,6 @@
+{
+    "Type"   : "bid",
+    "Client" : "client001",
+    "Amount" : 1,
+    "Price"  : 60.0
+}
