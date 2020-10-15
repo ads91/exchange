@@ -32,3 +32,7 @@ func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Requ
 	// listen indefinitely
 	log.Fatal(http.ListenAndServe(port, nil))
 }
+
+func newOrder(typ string, client string, amount int, price float64) interface{} {
+	return nil
+}
