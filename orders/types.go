@@ -1,10 +1,10 @@
 package orders
 
 // BID : a bid constant
-const BID = "bid"
+const BID string = "bid"
 
 // OFFER : an offer constant
-const OFFER = "offer"
+const OFFER string = "offer"
 
 // Bids : an array of Bid types
 type Bids []Bid
