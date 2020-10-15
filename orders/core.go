@@ -61,5 +61,5 @@ func addOrderToTable(order interface{}, ot *OrderTable) {
 	if ok {
 		ot.Offers = append(ot.Offers, offer) // [TODO]: index into order table, rather than sorting
 	}
-	log.Printf("added order to table: ", order)
+	log.Printf("added order to table: %v", order)
 }
