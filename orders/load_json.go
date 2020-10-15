@@ -8,15 +8,15 @@ import (
 )
 
 // AddJSONOrderFromDir : add a JSON order residing in a local directory to an order table instance
-func AddJSONOrderFromDir(ot *OrderTabble, fpath string, delete bool) {
+func AddJSONOrderFromDir(ot *OrderTable, fpath string, delete bool) {
 	var ojson orderJSON
 	// open the file
-	file, err := os.Open(fpath)
+	jsonFile, err := os.Open(fpath)
 	if err != nil {
 		log.Fatalf("couldn't open the file %s, error was %s", fpath, err)
 	}
 	// parse the file
-	byteValue, _ := ioutil.ReadAll(file)
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 	// read the order from the JSON
 	err = json.Unmarshal(byteValue, &ojson)
 	if err != nil {
@@ -25,14 +25,7 @@ func AddJSONOrderFromDir(ot *OrderTabble, fpath string, delete bool) {
 	// add order to table
 	addOrderToTable(newOrderFromJSON(&ojson), ot)
 	// close and delete order file, if required
-	file.Close()
-	if delete {
-		log.Print("deleting order at ", fpath)
-		err := os.Remove(fpath)
-		if err != nil {
-			log.Fatalf("couldn't delete order at %s, error was %s", fpath, err)
-		}
-	}
+	closeFile(jsonFile, fpath, delete)
 }
 
 // newOrderFromJSON : create an order instance from a JSON

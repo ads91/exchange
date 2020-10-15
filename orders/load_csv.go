@@ -24,14 +24,7 @@ func AddCSVOrderFromDir(ot *OrderTable, fpath string, delete bool) {
 	// add order to table
 	addOrderToTable(newOrderFromCSVRow(row), ot)
 	// close and delete order file, if required
-	csvFile.Close()
-	if delete {
-		log.Print("deleting order at ", fpath)
-		err := os.Remove(fpath)
-		if err != nil {
-			log.Fatalf("couldn't delete order at %s, error was %s", fpath, err)
-		}
-	}
+	closeFile(csvFile, fpath, delete)
 }
 
 // newOrderFromCSVRow : convert CSV row into an order instance
