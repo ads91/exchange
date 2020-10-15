@@ -13,7 +13,7 @@ func Sort(ot *OrderTable) {
 
 // Sort : sort the bids or offers in an order table instance
 func (ot *OrderTable) Sort(typ string) {
-	log.Print("sorting " + typ)
+	log.Print("sorting " + typ + "s")
 	if typ == BID {
 		ot.Bids = ot.Bids.sort()
 	} else if typ == OFFER {

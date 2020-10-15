@@ -21,13 +21,13 @@ func main() {
 	log.Printf("process ID is %d", os.Getpid())
 	// add a wait for the directory order listener
 	wg.Add(1)
-	go orders.ListenToDir(&ot, &wg, orders.AddJSONOrderFromDir, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/orders", 2, true)
+	go orders.ListenToDir(&ot, &wg, orders.AddJSONOrderFromDir, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/orders/", 2, true)
 	// add a wait for the HTTP order listener service
 	wg.Add(1)
 	go orders.ListenToHTTP(&wg, ot.AddJSONOrderFromHTTP, ":8080", "/order")
 	// add a wait for the order matcher
 	wg.Add(1)
-	go matching.SettleOrders(&ot, &wg, matching.WriteToJSON, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/settlements", 5)
+	go matching.SettleOrders(&ot, &wg, matching.WriteToJSON, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/settlements/", 5)
 	// wait
 	wg.Wait()
 }
