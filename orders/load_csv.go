@@ -21,20 +21,8 @@ func AddCSVOrderFromDir(ot *OrderTable, fpath string, delete bool) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// create orders
-	order := newOrderFromCSVRow(row)
-	// check for bid
-	bid, ok := order.(Bid)
-	if ok {
-		log.Printf("added bid to table: (%s, %s, %s, %s)", row[0], row[1], row[2], row[3])
-		ot.Bids = append(ot.Bids, bid) // [TODO]: index into order table, rather than sorting
-	}
-	// check for offer
-	offer, ok := order.(Offer)
-	if ok {
-		log.Printf("added offer to table: (%s, %s, %s, %s)", row[0], row[1], row[2], row[3])
-		ot.Offers = append(ot.Offers, offer) // [TODO]: index into order table, rather than sorting
-	}
+	// add order to table
+	addOrderToTable(newOrderFromCSVRow(row), ot)
 	// close and delete order file, if required
 	csvFile.Close()
 	if delete {
