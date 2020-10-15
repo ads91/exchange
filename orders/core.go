@@ -25,9 +25,10 @@ func ListenToDir(ot *OrderTable, wg *sync.WaitGroup, f func(ot *OrderTable, fpat
 }
 
 // ListenToHTTP : listen to order through an HTTP server
-func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Request), uri string, port string) {
+func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Request), port string, uri string) {
 	defer wg.Done()
 	// set-up handler
-	http.HandleFunc()
-	log.Fatal(http.ListenAndServe(nil, port))
+	http.HandleFunc(uri, f)
+	// listen indefinitely
+	log.Fatal(http.ListenAndServe(port, nil))
 }
