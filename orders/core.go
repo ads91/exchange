@@ -1,6 +1,7 @@
 package orders
 
 import (
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -24,4 +25,9 @@ func ListenToDir(ot *OrderTable, wg *sync.WaitGroup, f func(ot *OrderTable, fpat
 }
 
 // ListenToHTTP : listen to order through an HTTP server
-func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Request)) {}
+func ListenToHTTP(wg *sync.WaitGroup, f func(w http.ResponseWriter, r *http.Request), uri string, port string) {
+	defer wg.Done()
+	// set-up handler
+	http.HandleFunc()
+	log.Fatal(http.ListenAndServe(nil, port))
+}
