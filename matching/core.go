@@ -22,14 +22,14 @@ func SettleOrders(ot *orders.OrderTable, wg *sync.WaitGroup, settleFunc func(stl
 			fname := dir + getSettlementFilename(settlement)
 			settleFunc(settlement, fname)
 		}
+		log.Printf("order table: %v", ot)
 	}
 }
 
 // match : attempt to settle orders in an order table instance
 func match(ot *orders.OrderTable) (Settlement, bool) {
 	// sort the order table
-	ot.Sort(orders.BID)   // only sort when bids added (in exchange/orders)
-	ot.Sort(orders.OFFER) // only sort when offers added (in exchange/orders)
+	orders.Sort(ot) // [TODO]: sort only when orders are added
 	// extract first elements from the sorted bids and offers
 	if len(ot.Bids) > 0 && len(ot.Offers) > 0 {
 		stl, ok := settle(ot.Bids[0], ot.Offers[0])
