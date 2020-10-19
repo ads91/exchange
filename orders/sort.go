@@ -26,13 +26,13 @@ func (b Bids) sort() Bids {
 	// order by time, ASCENDING, then price, DESCENDING
 	_b := b
 	sort.Slice(_b, func(i, j int) bool {
-		if _b[i].Price > _b[j].Price {
+		if _b[i].Time < _b[j].Time {
 			return true
 		}
-		if _b[i].Price < _b[j].Price {
+		if _b[i].Time > _b[j].Time {
 			return false
 		}
-		return _b[i].Time < _b[j].Time
+		return _b[i].Price > _b[j].Price
 	})
 	return _b
 }
@@ -42,13 +42,13 @@ func (o Offers) sort() Offers {
 	// order by time, ASCENDING, then price, ASCENDING
 	_o := o
 	sort.Slice(_o, func(i, j int) bool {
-		if _o[i].Price < _o[j].Price {
+		if _o[i].Time < _o[j].Time {
 			return true
 		}
-		if _o[i].Price > _o[j].Price {
+		if _o[i].Time > _o[j].Time {
 			return false
 		}
-		return _o[i].Time < _o[j].Time
+		return _o[i].Price < _o[j].Price
 	})
 	return _o
 }

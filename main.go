@@ -14,6 +14,12 @@ import (
 // - add blocking in to order table to avoid multiple read/writes at the same time (race condition).
 // - check race condition in sorting of orders vs. reading/writing to the table (lock on sort).
 
+// === packages ===
+// go get golang.org/x/tools/cmd/cover
+
+// === testing ===
+// go test ./... -v -coverpkg=./...
+
 func main() {
 	var wg sync.WaitGroup
 	var ot orders.OrderTable
