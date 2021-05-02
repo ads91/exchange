@@ -1,0 +1,16 @@
+{
+ "Bid": {
+  "Client": "client003",
+  "Amount": 1,
+  "Price": 62,
+  "Time": 1619977401814044000
+ },
+ "Offer": {
+  "Client": "client002",
+  "Amount": 1,
+  "Price": 62,
+  "Time": 1619977441520640000
+ },
+ "Amount": 1,
+ "Price": 62
+}

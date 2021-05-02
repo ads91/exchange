@@ -1,6 +1,7 @@
 package main
 
 import (
+	"exchange/config"
 	"exchange/matching"
 	"exchange/orders"
 	"log"
@@ -25,15 +26,30 @@ func main() {
 	var ot orders.OrderTable
 	// process ID
 	log.Printf("process ID is %d", os.Getpid())
-	// add a wait for the directory order listener
-	wg.Add(1)
-	go orders.ListenToDir(&ot, &wg, orders.AddJSONOrderFromDir, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/orders/", 2, true)
+	// add a wait for the directory order listener if the config demands so
+	if config.LOCAL_ORDERS_ENABLED {
+		wg.Add(1)
+		go orders.ListenToDir(&ot, &wg, orders.AddJSONOrderFromDir, config.LOCAL_ORDERS_DIR, config.LOCAL_ORDERS_SCAN_TIME, config.LOCAL_ORDERS_DELETE_ON_READ)
+	}
 	// add a wait for the HTTP order listener service
-	wg.Add(1)
-	go orders.ListenToHTTP(&wg, ot.AddJSONOrderFromHTTP, ":8080", "/order")
+	if config.HTTP_ORDERS_ENABLED {
+		wg.Add(1)
+		go orders.ListenToHTTP(&wg, ot.AddJSONOrderFromHTTP, getPort(), config.HTTP_ORDERS_END_POINT)
+	}
 	// add a wait for the order matcher
 	wg.Add(1)
-	go matching.SettleOrders(&ot, &wg, matching.WriteToJSON, "/Users/andrewsanderson/Documents/dev/go/src/exchange/data/settlements/", 5)
+	go matching.SettleOrders(&ot, &wg, matching.WriteToJSON, config.SETTLEMENTS_OUTPUT_DIR, config.MATCHING_RATE)
 	// wait
 	wg.Wait()
+}
+
+func getPort() string {
+	// test for port
+	port := os.Getenv("PORT")
+	// default port
+	if port == "" {
+		port = config.HTTP_ORDERS_PORT
+	}
+	log.Printf("listening on port %s", port)
+	return ":" + port
 }

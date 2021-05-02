@@ -10,7 +10,7 @@ var LOCAL_ORDERS_SCAN_TIME = 2
 var LOCAL_ORDERS_DELETE_ON_READ = true
 
 // HTTP orders config items
-var HTTP_ORDERS_ENABLED = false
+var HTTP_ORDERS_ENABLED = true
 
 var HTTP_ORDERS_PORT = "8080"
 
