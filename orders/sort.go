@@ -23,32 +23,32 @@ func (ot *OrderTable) Sort(typ string) {
 
 // sort : sort an array of bids
 func (b Bids) sort() Bids {
-	// order by time, ASCENDING, then price, DESCENDING
+	// order by price, DESCENDING, then time, ASCENDING
 	_b := b
 	sort.Slice(_b, func(i, j int) bool {
-		if _b[i].Time < _b[j].Time {
+		if _b[i].Price > _b[j].Price {
 			return true
 		}
-		if _b[i].Time > _b[j].Time {
+		if _b[i].Price < _b[j].Price {
 			return false
 		}
-		return _b[i].Price > _b[j].Price
+		return _b[i].Time < _b[j].Time
 	})
 	return _b
 }
 
 // sort : sort an array of offers
 func (o Offers) sort() Offers {
-	// order by time, ASCENDING, then price, ASCENDING
+	// order by price, ASCENDING, then price, ASCENDING
 	_o := o
 	sort.Slice(_o, func(i, j int) bool {
-		if _o[i].Time < _o[j].Time {
+		if _o[i].Price < _o[j].Price {
 			return true
 		}
-		if _o[i].Time > _o[j].Time {
+		if _o[i].Price > _o[j].Price {
 			return false
 		}
-		return _o[i].Price < _o[j].Price
+		return _o[i].Time < _o[j].Time
 	})
 	return _o
 }

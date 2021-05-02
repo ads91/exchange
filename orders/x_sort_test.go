@@ -24,10 +24,10 @@ func TestSortBids(t *testing.T) {
 	log.Printf("sorted order table is %v", ot.Bids)
 	// expected result
 	sortedBids := Bids{
+		Bid{"client-04", 1, 150.0, 4},
 		Bid{"client-02", 1, 125.0, 1},
 		Bid{"client-01", 1, 100.0, 1},
 		Bid{"client-03", 1, 100.0, 2},
-		Bid{"client-04", 1, 150.0, 4},
 	}
 	// check rows
 	for i := 0; i < len(sortedBids); i++ {
@@ -54,8 +54,8 @@ func TestSortOffers(t *testing.T) {
 	// expected result
 	sortedOffers := Offers{
 		Offer{"client-01", 1, 100.0, 1},
-		Offer{"client-02", 1, 125.0, 1},
 		Offer{"client-03", 1, 100.0, 2},
+		Offer{"client-02", 1, 125.0, 1},
 		Offer{"client-04", 1, 150.0, 4},
 	}
 	// check rows
