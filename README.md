@@ -4,7 +4,7 @@
 
 An engine for matching bids and offers. Trades are asynchronougly booked and matched through seperate goroutines.
 
-Trade booking can be achieved via CSV or JSON file trade representations saved to an OS directory or via a JSON HTTP request.
+Trade booking can be achieved via CSV or JSON file trade representations saved to an OS directory or sent via a JSON HTTP request.
 
 ## Usage
 
