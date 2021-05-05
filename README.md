@@ -2,9 +2,11 @@
 
 ## What is it?
 
-An engine for matching bids and offers. Trades are asynchronougly booked and matched through seperate goroutines.
+An engine for matching bids and offers. Orders are asynchronougly booked and matched.
 
-Trade booking can be achieved via CSV or JSON file trade representations saved to an OS directory or sent via a JSON HTTP request.
+Orders are first matched by price then by time of arrival to the exchange. If the lowest offer price is higher than the highest bid price, the two are matched at the corresponding mid-price.
+
+Order booking is achieved via CSV or JSON trade representations saved to a directory local to the application or consumed via an HTTP request.
 
 ## Usage
 
@@ -20,17 +22,45 @@ Once successfully built, you should now have an executable called exchange in th
 
     ./exchange
 
+The application logs the state of the order book with an interval equal to the time specified in the LOCAL_ORDERS_SCAN_TIME configuration item listed below. Initially, the order book is empty and we can add to the order book via approaches.
+
+A JSON order take on the following structure independent of whether it's saved locally to the exchange or dispatched via HTTP.
+
+```json
+{
+    "Type"   : "bid",
+    "Client" : "client001",
+    "Amount" : 1,
+    "Price"  : 60.0
+}
+```
+
+Where
+
+- **Type** is the order type, bid or offer,
+- **Client** is a unique identifier of the client placing the order,
+- **Amount** is the number of units to be matched and
+- **Price** is the price at which the client is prepared to buy/sell.
+
+*Note: the exchange currently only fills orders of Amount equal to 1 unit.*
+
 In the config directory a go file exists that defines application-level configuration items. These are as follows.
 
-- **LOCAL_ORDERS_ENABLED** instructs the exchange to scan for orders saved in a directory local to the application,
-- **LOCAL_ORDERS_DIR** the directory for the exchange to scan if local order booking is enabled,
-- **LOCAL_ORDERS_SCAN_TIME** the wait time between scanning the local directory for orders,
-- **LOCAL_ORDERS_DELETE_ON_READ** true to delete orders on read, false otherwise,
-- **HTTP_ORDERS_ENABLED** instructs the exchange to accept orders via HTTP,
-- **HTTP_ORDERS_PORT** the port to listen on for orders sent via HTTP,
-- **HTTP_ORDERS_END_POINT** the HTTP end point to dispatch POST request orders,
-- **SETTLEMENTS_OUTPUT_DIR** a local directory to save settlement JSONs and
-- **MATCHING_RATE** the wait time between attempts for the exchange to match orders.
+- **LOCAL_ORDERS_ENABLED** instructs the exchange to scan for orders saved in a local directory, true to scan, false otherwise,
+- **LOCAL_ORDERS_DIR** is the directory for the exchange to scan if local order booking is enabled,
+- **LOCAL_ORDERS_SCAN_TIME** is the wait time between scanning the local directory for orders,
+- **LOCAL_ORDERS_DELETE_ON_READ** can be true to delete orders on read, false otherwise,
+- **HTTP_ORDERS_ENABLED** is a flag to instruct the exchange to process HTTP orders, true to accept, false otherwise,
+- **HTTP_ORDERS_PORT** is the port to listen on for orders sent via HTTP,
+- **HTTP_ORDERS_END_POINT** is the HTTP end point to dispatch POST request orders,
+- **SETTLEMENTS_OUTPUT_DIR** is a local directory to save settlement JSONs and
+- **MATCHING_RATE** is the wait time between attempts for the exchange to match orders.
+
+There are two ways in which the exchange books orders. The first is via orders represented as CSVs of JSONs being saved to a directory accesible to the exchange. The second method is by dispatching a JSON via HTTP to the exchange. Below we outline the two approaches with an example for each. 
+
+#### Local order booking
+
+In order for the exchange to monitor a directory for orders the LOCAL_ORDERS_ENABLED flag above must be set to true. 
 
 ## Matching
 
